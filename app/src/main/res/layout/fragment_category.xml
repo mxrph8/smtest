@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentCategory"
+    android:background="@color/categorybg">
+
+    <CheckBox
+        android:id="@+id/cbfm"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:fontFamily="@font/archivo_black"
+
+        android:onClick="onCheckboxClicked"
+
+        android:text="Физ-Мат"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/cbse"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:fontFamily="@font/archivo_black"
+        android:text="Соц-Эконом"
+        android:progress="400"
+
+        android:onClick="onCheckboxClicked"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbfm" />
+
+    <CheckBox
+        android:id="@+id/cbxb"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:fontFamily="@font/archivo_black"
+        android:text="Хим-Био"
+
+        android:onClick="onCheckboxClicked"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbse" />
+
+    <SeekBar
+        android:id="@+id/sb"
+        android:layout_width="362dp"
+        android:layout_height="23dp"
+        android:max = "400"
+        android:min = "0"
+        android:progress="400"
+        android:onClick="onSeekBarClicked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbxb" />
+
+    <TextView
+        android:id="@+id/textViewdont"
+        android:layout_width="90dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="25dp"
+        android:text="Значние : "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sb" />
+
+    <TextView
+        android:id="@+id/tvsb"
+        android:layout_width="90dp"
+        android:layout_height="26dp"
+        android:text="400"
+        app:layout_constraintStart_toEndOf="@+id/textViewdont"
+        app:layout_constraintTop_toBottomOf="@+id/sb" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
