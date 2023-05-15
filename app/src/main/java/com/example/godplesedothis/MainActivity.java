@@ -16,10 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.example.godplesedothis.databinding.FragmentCategoryBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +27,32 @@ public class MainActivity extends AppCompatActivity {
 
     private List<University> universities;
 
-    private static final MutableLiveData<Integer> seekBarValue = new MutableLiveData<>();
+    private static final MutableLiveData<Integer> seekBarValue;
+    private static final MutableLiveData<Boolean> cb_fm;
+    private static final MutableLiveData<Boolean> cb_se;
+    private static final MutableLiveData<Boolean> cb_xb;
+
+    static {
+        seekBarValue = new MutableLiveData<>();
+        seekBarValue.postValue(400);
+        cb_fm = new MutableLiveData<>();
+        cb_se = new MutableLiveData<>();
+        cb_xb = new MutableLiveData<>();
+    }
     public static MutableLiveData<Integer> getSeekBarValue(){
         return seekBarValue;
     }
+    public static MutableLiveData<Boolean> getCb_fm(){
+        return cb_fm;
+    }
+    public static MutableLiveData<Boolean> getCb_se(){
+        return cb_se;
+    }
+    public static MutableLiveData<Boolean> getCb_xb(){
+        return cb_xb;
+    }
+
+
 
 
     FragmentCategory fragmentCategory = new FragmentCategory();
@@ -48,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.ListView);
 
         arrayAdapterStart();
+        initLiveData();
+
 
         Button categorybt = (Button) findViewById(R.id.categorybt);
         categorybt.setOnClickListener(new View.OnClickListener() {
@@ -69,11 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void initLiveData(){
-
-        ListView listView = findViewById(R.id.ListView);
-        TextView tvseekbar = findViewById(R.id.tvsb);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.vuzitem, R.id.vuzname, filteredList);
+    public void initLiveData(){
 
 
 
@@ -81,59 +98,110 @@ public class MainActivity extends AppCompatActivity {
                 new Observer<Integer>() {
                     @Override
                     public void onChanged(Integer integer) {
-                        for (University university : universities) {
-                            if (university.getPoints() <= getSeekBarValue().getValue()) {
-                                filteredList.add(university);
-                                tvseekbar.setText(seekBarValue.toString());
-                                listView.setAdapter(adapter);
-                            }
-                        }
+                        System.out.println("123");
+//                        for (University university : universities) {
+//                            if (university.getPoints() <= getSeekBarValue().getValue()) {
+//                                filteredList.add(university);
+////                                listView.setAdapter(adapter);
+//                            }
+//                        }
+                        FilterByPoints();
                     }
                 }
                 );
+
+        cb_fm.observe(this,
+                new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if (getCb_fm().getValue() == true){
+                            System.out.println("11");
+                            filterByFaculty("Физ-Мат");
+                        }
+                        else {
+                            System.out.println("111");
+                            removeByFaculty("Физ-Мат");}
+                    }
+                });
+        cb_se.observe(this,
+                new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        System.out.println("2");
+                        if (getCb_se().getValue() == true){
+                            filterByFaculty("Соц-Эконом");
+                        }
+                        else removeByFaculty("Соц-Эконом");
+                    }
+                });
+        cb_xb.observe(this,
+                new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        System.out.println("3");
+                        if (getCb_xb().getValue() == true){
+                            filterByFaculty("Хим-Био");
+                        }
+                        else removeByFaculty("Хим-Био");
+                    }
+                });
     }
-
-    public void onCheckboxClicked(View view) {
-
-        CheckBox checkboxfm = findViewById(R.id.cbfm);
-        CheckBox checkboxse = findViewById(R.id.cbse);
-        CheckBox checkboxxb = findViewById(R.id.cbxb);
-
+    public void FilterByPoints(){
         ListView listView = findViewById(R.id.ListView);
 
-        CheckBox checkBox = (CheckBox) view;
 
-        boolean checked = checkBox.isChecked();
 
-        switch (view.getId()) {
-            case R.id.cbfm:
-                if (checked) {
-                    filterByFaculty("Физ-Мат");
-                } else {
-                    removeByFaculty("Физ-Мат");
-                }
-                break;
-            case R.id.cbse:
-                if (checked) {
-                    filterByFaculty("Соц-Эконом");
-                } else {
-                    removeByFaculty("Соц-Эконом");
-                }
-                break;
-            case R.id.cbxb:
-                if (checked) {
-                    filterByFaculty("Хим-Био");
-                } else {
-                    removeByFaculty("Хим-Био");
-                }
-            default:
-                if (checkboxfm.isChecked() != true && checkboxse.isChecked() != true && checkboxxb.isChecked() != true) {
-                    ArrayAdapter<University> adapter = new ArrayAdapter<>(this,
-                            R.layout.vuzitem, R.id.vuzname, universities);
-                    listView.setAdapter(adapter);
-                }
+        for (University university : universities) {
+            if (university.getPoints() <= getSeekBarValue().getValue()) {
+                filteredList.add(university);
+                ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.vuzitem, R.id.vuzname, filteredList);
+                listView.setAdapter(adapter);
+
+            }
         }
     }
+
+//    public void onCheckboxClicked(View view) {
+//
+//        CheckBox checkboxfm = findViewById(R.id.cbfm);
+//        CheckBox checkboxse = findViewById(R.id.cbse);
+//        CheckBox checkboxxb = findViewById(R.id.cbxb);
+//
+//        ListView listView = findViewById(R.id.ListView);
+//
+//        CheckBox checkBox = (CheckBox) view;
+//
+//        boolean checked = checkBox.isChecked();
+//
+//        switch (view.getId()) {
+//            case R.id.cbfm:
+//                if (checked) {
+//                    filterByFaculty("Физ-Мат");
+//                } else {
+//                    removeByFaculty("Физ-Мат");
+//                }
+//                break;
+//            case R.id.cbse:
+//                if (checked) {
+//                    filterByFaculty("Соц-Эконом");
+//                } else {
+//                    removeByFaculty("Соц-Эконом");
+//                }
+//                break;
+//            case R.id.cbxb:
+//                if (checked) {
+//                    filterByFaculty("Хим-Био");
+//                } else {
+//                    removeByFaculty("Хим-Био");
+//                }
+//            default:
+//                if (checkboxfm.isChecked() != true && checkboxse.isChecked() != true && checkboxxb.isChecked() != true) {
+//                    ArrayAdapter<University> adapter = new ArrayAdapter<>(this,
+//                            R.layout.vuzitem, R.id.vuzname, universities);
+//                    listView.setAdapter(adapter);
+//                }
+//        }
+//    }
 
     private void setNewFragment(Fragment fragment) {
         if (CLickSchet % 2 != 0) {
@@ -179,10 +247,6 @@ public class MainActivity extends AppCompatActivity {
     public void removeByFaculty(String faculty) {
         ListView listView = findViewById(R.id.ListView);
 
-        CheckBox checkboxfm = findViewById(R.id.cbfm);
-        CheckBox checkboxse = findViewById(R.id.cbse);
-        CheckBox checkboxxb = findViewById(R.id.cbxb);
-
         for (University university : universities) {
             if (university.getFaculty().equals(faculty)) {
                 filteredList.remove(university);
@@ -197,16 +261,11 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = findViewById(R.id.ListView);
 
-        CheckBox checkboxfm = findViewById(R.id.cbfm);
-        CheckBox checkboxse = findViewById(R.id.cbse);
-        CheckBox checkboxxb = findViewById(R.id.cbxb);
-
         for (University university : universities) {
             if (university.getFaculty().equals(faculty)) {
                 filteredList.add(university);
             }
         }
-
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.vuzitem, R.id.vuzname, filteredList);
         listView.setAdapter(adapter);
     }

@@ -13,7 +13,7 @@
         android:layout_height="110dp"
         android:fontFamily="@font/archivo_black"
 
-        android:onClick="onCheckboxClicked"
+
 
         android:text="Физ-Мат"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
         android:text="Соц-Эконом"
         android:progress="400"
 
-        android:onClick="onCheckboxClicked"
+
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,6 @@
         android:fontFamily="@font/archivo_black"
         android:text="Хим-Био"
 
-        android:onClick="onCheckboxClicked"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
